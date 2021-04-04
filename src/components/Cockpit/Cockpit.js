@@ -1,7 +1,30 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import classes from './Cockpit.module.css';
 
-const cockpit = (props) => {
+const Cockpit = (props) => {
+    const toggleBtnRef = useRef(null);
+
+    useEffect(() => {
+        console.log('[Cockpit.js] useEffect');
+        // http request..
+        // setTimeout(() => {
+        //     alert('Saved data to cloud!');
+        // }, 1000);
+        toggleBtnRef.current.click();
+    
+        return () => {
+            console.log('[Cockpit.js] cleanup work in useEffect');
+        }
+    }, []);
+
+    useEffect(() => {
+        console.log('[Cockpit.js] 2nd useEffect');
+        // http request..
+        return () => {
+            console.log('[Cockpit.js] cleanup work in 2nd useEffect');
+        }
+    });
+
     const assignClasses = [];
     let btnClass = '';
 
@@ -9,23 +32,23 @@ const cockpit = (props) => {
         btnClass = classes.Red;
     }
 
-    if (props.persons.length <= 2) {
+    if (props.personsLength <= 2) {
         assignClasses.push(classes.red);
     }
 
-    if (props.persons.length <= 1) {
+    if (props.personsLength <= 1) {
         assignClasses.push(classes.bold);
     }
 
     return (
         <div className={classes.Cockpit}>
-            <h1>Hi, I'm a React App</h1>
+            <h1>{props.title}</h1>
             <p className={assignClasses.join(' ')}>This is really working!</p>
-            <button className={btnClass} onClick={props.clicked}>
+            <button ref={toggleBtnRef} className={btnClass} onClick={props.clicked}>
                 Toggle Persons
-        </button>
+            </button>
         </div>
     );
 };
 
-export default cockpit;
+export default React.memo(Cockpit);
